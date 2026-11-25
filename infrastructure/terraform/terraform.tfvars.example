@@ -1,0 +1,13 @@
+# Example Terraform variables file.
+# Copy to terraform.tfvars locally (ignored by Git) and supply HCLOUD_TOKEN via environment.
+# Do NOT commit real SSH keys, tokens, or production IPs.
+
+project_name             = "infraos"
+environment              = "production"
+location                 = "sin"
+server_type              = "cpx21"
+os_image                 = "ubuntu-24.04"
+ssh_public_key           = "ssh-ed25519 AAAA...replace-with-operator-public-key"
+admin_cidr_blocks        = ["203.0.113.10/32"]
+private_network_cidr     = "10.42.0.0/16"
+enable_dedicated_db_node = false

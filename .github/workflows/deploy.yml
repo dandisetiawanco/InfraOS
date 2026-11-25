@@ -1,0 +1,45 @@
+name: Deploy (Manual Template)
+
+# Manually triggered template for authorized Linux environments.
+# Does not run automatically and requires explicitly configured environment secrets.
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Target authorized environment
+        required: true
+        type: choice
+        options:
+          - staging
+          - production
+      release_version:
+        description: Immutable release tag (for example v1.0.0)
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  validate-and-plan:
+    name: Pre-Deployment Verification
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.24"
+          cache: true
+      - name: Run backend test suite before release
+        run: go test -race -count=1 ./...
+      - name: Build release artifacts
+        run: |
+          CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -trimpath -ldflags="-s -w" -o dist/infraos-api ./cmd/api
+          CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -trimpath -ldflags="-s -w" -o dist/infraos-worker ./cmd/worker
+          CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -trimpath -ldflags="-s -w" -o dist/infraos-agent ./cmd/agent
+      - name: Verify deployment target configuration
+        run: |
+          echo "Prepared release ${{ inputs.release_version }} for ${{ inputs.environment }}."
+          echo "Configure SSH deploy host secrets or container registry push credentials before enabling remote apply."

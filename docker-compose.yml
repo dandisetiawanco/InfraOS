@@ -1,0 +1,141 @@
+# Infrastructure Profile for InfraOS
+# Do not run simultaneously with the lightweight local profile on overlapping ports.
+# PostgreSQL and Redis bind to internal Docker networks only (never exposed publicly by default).
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-infraos}
+      POSTGRES_USER: ${POSTGRES_USER:-infraos}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-infraos-dev-change-me}
+    volumes:
+      - infraos_pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-infraos} -d ${POSTGRES_DB:-infraos}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - infraos_internal
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: ["redis-server", "--save", "60", "1", "--loglevel", "warning"]
+    volumes:
+      - infraos_redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - infraos_internal
+
+  api:
+    build:
+      context: .
+      dockerfile: infrastructure/docker/api.Dockerfile
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      INFRAOS_PROFILE: infrastructure
+      INFRAOS_API_HOST: 0.0.0.0
+      INFRAOS_API_PORT: 8080
+      INFRAOS_DB_DRIVER: postgres
+      INFRAOS_POSTGRES_DSN: postgres://${POSTGRES_USER:-infraos}:${POSTGRES_PASSWORD:-infraos-dev-change-me}@postgres:5432/${POSTGRES_DB:-infraos}?sslmode=disable
+      INFRAOS_REDIS_ADDR: redis:6379
+      INFRAOS_ALLOWED_ORIGINS: http://localhost:80,http://localhost,http://localhost:3000
+      INFRAOS_EMBEDDED_WORKER: "false"
+      INFRAOS_DOCKER_ENABLED: "false"
+      INFRAOS_MONITORING_LOCAL_ALLOWLIST: http://sample-app:8090
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:8080/readyz"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+    networks:
+      - infraos_internal
+
+  worker:
+    build:
+      context: .
+      dockerfile: infrastructure/docker/worker.Dockerfile
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      api:
+        condition: service_healthy
+    environment:
+      INFRAOS_PROFILE: infrastructure
+      INFRAOS_DB_DRIVER: postgres
+      INFRAOS_POSTGRES_DSN: postgres://${POSTGRES_USER:-infraos}:${POSTGRES_PASSWORD:-infraos-dev-change-me}@postgres:5432/${POSTGRES_DB:-infraos}?sslmode=disable
+      INFRAOS_REDIS_ADDR: redis:6379
+      INFRAOS_MONITORING_LOCAL_ALLOWLIST: http://sample-app:8090
+    networks:
+      - infraos_internal
+
+  web:
+    build:
+      context: .
+      dockerfile: infrastructure/docker/web.Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: ""
+    restart: unless-stopped
+    depends_on:
+      api:
+        condition: service_healthy
+    networks:
+      - infraos_internal
+
+  nginx:
+    image: nginx:1.27-alpine
+    restart: unless-stopped
+    depends_on:
+      - web
+      - api
+    ports:
+      - "127.0.0.1:8088:80"
+    volumes:
+      - ./infrastructure/nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    networks:
+      - infraos_internal
+
+  prometheus:
+    image: prom/prometheus:v3.2.1
+    restart: unless-stopped
+    profiles: ["observability"]
+    ports:
+      - "127.0.0.1:9090:9090"
+    volumes:
+      - ./infrastructure/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./infrastructure/prometheus/alerts.yml:/etc/prometheus/alerts.yml:ro
+    networks:
+      - infraos_internal
+
+  sample-app:
+    build:
+      context: .
+      dockerfile: infrastructure/docker/sample-app/Dockerfile
+    restart: unless-stopped
+    profiles: ["sample"]
+    environment:
+      PORT: "8090"
+      APP_VERSION: "v1.0.0"
+    networks:
+      - infraos_internal
+
+volumes:
+  infraos_pg_data:
+  infraos_redis_data:
+
+networks:
+  infraos_internal:
+    driver: bridge
