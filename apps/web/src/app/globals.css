@@ -1,0 +1,328 @@
+@import "tailwindcss";
+
+:root {
+  color-scheme: light dark;
+
+  --canvas: light-dark(#F3F6F8, #10171C);
+  --surface: light-dark(#FFFFFF, #19242C);
+  --surface-subtle: light-dark(#EBF0F3, #141E25);
+  --surface-elevated: light-dark(#FFFFFF, #202E38);
+
+  --text-primary: light-dark(#172A32, #EDF4F6);
+  --text-secondary: light-dark(#586971, #A4B5BD);
+
+  --accent: light-dark(#237C83, #9DE1DD);
+  --accent-contrast: light-dark(#FFFFFF, #10171C);
+  --accent-soft: light-dark(rgba(35, 124, 131, 0.11), rgba(157, 225, 221, 0.14));
+
+  --border: light-dark(rgba(23, 42, 50, 0.12), rgba(237, 244, 246, 0.12));
+  --border-strong: light-dark(rgba(23, 42, 50, 0.28), rgba(237, 244, 246, 0.28));
+
+  --glass-nav-bg: light-dark(rgba(255, 255, 255, 0.76), rgba(25, 36, 44, 0.74));
+  --glass-overlay-bg: light-dark(rgba(255, 255, 255, 0.88), rgba(24, 35, 43, 0.88));
+  --glass-specular: light-dark(rgba(255, 255, 255, 0.72), rgba(237, 244, 246, 0.12));
+  --glass-shadow: light-dark(0 12px 32px rgba(23, 42, 50, 0.08), 0 18px 40px rgba(0, 0, 0, 0.42));
+
+  --status-ok: light-dark(#166534, #6EE7B7);
+  --status-ok-bg: light-dark(rgba(22, 101, 52, 0.10), rgba(110, 231, 183, 0.14));
+  --status-warn: light-dark(#92400E, #FCD34D);
+  --status-warn-bg: light-dark(rgba(146, 64, 14, 0.10), rgba(252, 211, 77, 0.14));
+  --status-err: light-dark(#991B1B, #FCA5A5);
+  --status-err-bg: light-dark(rgba(153, 27, 27, 0.10), rgba(252, 165, 165, 0.15));
+  --status-info: light-dark(#1E5860, #9DE1DD);
+  --status-info-bg: light-dark(rgba(35, 124, 131, 0.11), rgba(157, 225, 221, 0.14));
+}
+
+:root:has(> head > meta[name="color-scheme"][content="dark"]) {
+  color-scheme: dark;
+}
+
+:root:has(> head > meta[name="color-scheme"][content="light"]) {
+  color-scheme: light;
+}
+
+@layer base {
+  html {
+    background-color: var(--canvas);
+    color: var(--text-primary);
+    font-family: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100dvh;
+    background-color: var(--canvas);
+    color: var(--text-primary);
+    overflow-x: clip;
+  }
+
+  code, pre, kbd, .font-mono {
+    font-family: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+
+  a[href],
+  button:not(:disabled),
+  summary,
+  select:not(:disabled),
+  label[for],
+  input[type="checkbox"]:not(:disabled),
+  input[type="radio"]:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  [role="tab"]:not([aria-disabled="true"]),
+  [role="switch"]:not([aria-disabled="true"]) {
+    cursor: pointer;
+  }
+
+  button:disabled,
+  select:disabled,
+  input:disabled,
+  [aria-disabled="true"] {
+    cursor: not-allowed;
+  }
+
+  :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  dialog:modal {
+    overscroll-behavior: contain;
+  }
+
+  dialog::backdrop {
+    overflow: hidden;
+    overscroll-behavior: contain;
+    background: rgba(16, 23, 28, 0.56);
+    backdrop-filter: blur(6px);
+  }
+}
+
+/* Material Level 1: Canvas */
+.infra-canvas {
+  background-color: var(--canvas);
+  color: var(--text-primary);
+}
+
+/* Material Level 2: Solid content surfaces (charts, logs, tables, forms, details) */
+.infra-surface {
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+}
+
+.infra-surface-subtle {
+  background-color: var(--surface-subtle);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+/* Material Level 3: Translucent Liquid Glass navigation (sidebar, toolbar, public navbar) */
+.infra-glass-nav {
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: inset 0 1px 0 var(--glass-specular), 0 8px 24px rgba(16, 23, 28, 0.06);
+}
+
+@supports (backdrop-filter: blur(1px)) {
+  .infra-glass-nav {
+    background-color: var(--glass-nav-bg);
+    backdrop-filter: blur(18px) saturate(165%);
+    -webkit-backdrop-filter: blur(18px) saturate(165%);
+  }
+}
+
+/* Material Level 4: Elevated Liquid Glass overlays (command palette, dialogs, menus, notifications) */
+.infra-glass-overlay {
+  background-color: var(--surface-elevated);
+  border: 1px solid var(--border-strong);
+  box-shadow: inset 0 1px 0 var(--glass-specular), var(--glass-shadow);
+}
+
+@supports (backdrop-filter: blur(1px)) {
+  .infra-glass-overlay {
+    background-color: var(--glass-overlay-bg);
+    backdrop-filter: blur(22px) saturate(175%);
+    -webkit-backdrop-filter: blur(22px) saturate(175%);
+  }
+}
+
+/* Interactive controls */
+.infra-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 40px;
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  background-color: var(--accent);
+  color: var(--accent-contrast);
+  font-weight: 600;
+  font-size: 0.875rem;
+  border: 1px solid transparent;
+  transition: opacity 140ms ease, transform 120ms ease;
+}
+
+.infra-btn-primary:hover:not(:disabled) {
+  opacity: 0.92;
+}
+
+.infra-btn-primary:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.infra-btn-primary:disabled {
+  opacity: 0.5;
+}
+
+.infra-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 40px;
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  background-color: var(--surface);
+  color: var(--text-primary);
+  font-weight: 500;
+  font-size: 0.875rem;
+  border: 1px solid var(--border-strong);
+  transition: background-color 140ms ease, border-color 140ms ease;
+}
+
+.infra-btn-secondary:hover:not(:disabled) {
+  background-color: var(--surface-subtle);
+}
+
+.infra-btn-secondary:disabled {
+  opacity: 0.5;
+}
+
+.infra-input {
+  width: 100%;
+  min-height: 40px;
+  padding: 0.5rem 0.75rem;
+  border-radius: 10px;
+  background-color: var(--surface);
+  color: var(--text-primary);
+  border: 1px solid var(--border-strong);
+  font-size: 0.875rem;
+}
+
+.infra-input::placeholder {
+  color: var(--text-secondary);
+}
+
+/* Container-responsive semantic data tables */
+.infra-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  container-type: inline-size;
+}
+
+.infra-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.875rem;
+}
+
+.infra-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background-color: var(--surface-subtle);
+  color: var(--text-secondary);
+  font-weight: 600;
+  text-align: left;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.infra-table tbody td,
+.infra-table tbody th {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  vertical-align: middle;
+}
+
+.infra-table tbody tr:last-child td,
+.infra-table tbody tr:last-child th {
+  border-bottom: none;
+}
+
+.infra-table tbody tr:hover {
+  background-color: var(--surface-subtle);
+}
+
+@container (max-width: 580px) {
+  .infra-table-stack,
+  .infra-table-stack tbody,
+  .infra-table-stack tr,
+  .infra-table-stack td,
+  .infra-table-stack th {
+    display: block;
+    width: 100%;
+  }
+
+  .infra-table-stack thead {
+    display: none;
+  }
+
+  .infra-table-stack tbody tr {
+    padding: 0.75rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .infra-table-stack tbody td,
+  .infra-table-stack tbody th {
+    border: none;
+    padding: 0.3rem 0.25rem;
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .infra-table-stack tbody td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: var(--text-secondary);
+    flex-shrink: 0;
+  }
+}
+
+.visually-hidden:where(:not(:focus-within, :active)) {
+  position: absolute !important;
+  clip-path: inset(50%) !important;
+  overflow: hidden !important;
+  width: 1px !important;
+  height: 1px !important;
+  margin: -1px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  white-space: nowrap !important;
+}
+
+@media (pointer: coarse) {
+  .infra-btn-primary,
+  .infra-btn-secondary,
+  .infra-input,
+  .infra-touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

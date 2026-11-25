@@ -1,0 +1,12 @@
+{
+  "name": "infraos-monorepo",
+  "private": true,
+  "packageManager": "pnpm@12.21.0",
+  "scripts": {
+    "dev:web": "pnpm --filter @infraos/web dev",
+    "build:web": "pnpm --filter @infraos/web build",
+    "lint:web": "pnpm --filter @infraos/web lint",
+    "typecheck:web": "pnpm --filter @infraos/web typecheck",
+    "test:web": "pnpm --filter @infraos/web test"
+  }
+}
