@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 56" width="240" height="56" fill="none">
+  <rect x="4" y="4" width="48" height="48" rx="12" fill="#19242C" stroke="#9DE1DD" stroke-opacity="0.32" stroke-width="1.5"/>
+  <path d="M14 21.5L28 14L42 21.5L28 29L14 21.5Z" fill="#9DE1DD"/>
+  <path d="M14 29.5L28 37L42 29.5" stroke="#EDF4F6" stroke-width="2.8" stroke-linecap="square"/>
+  <path d="M14 36.5L28 44L42 36.5" stroke="#9DE1DD" stroke-opacity="0.6" stroke-width="2.8" stroke-linecap="square"/>
+  <circle cx="28" cy="21.5" r="2.5" fill="#19242C"/>
+  <text x="66" y="36" fill="#EDF4F6" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="28" font-weight="700" letter-spacing="-0.03em">Infra<tspan fill="#9DE1DD">OS</tspan></text>
+</svg>

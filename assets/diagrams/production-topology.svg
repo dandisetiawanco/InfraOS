@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 340" width="940" height="340" fill="none">
+  <rect width="940" height="340" rx="16" fill="#F3F6F8"/>
+  <text x="32" y="42" fill="#172A32" font-family="system-ui, sans-serif" font-size="19" font-weight="700">Production Linux Deployment Topology</text>
+  <text x="32" y="64" fill="#586971" font-family="system-ui, sans-serif" font-size="12">Only ports 80/443 (and CIDR-restricted SSH 22) exposed publicly; PostgreSQL and Redis isolated on private network</text>
+  <defs><marker id="a8" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 1L10 5L0 9Z" fill="#237C83"/></marker></defs>
+
+  <rect x="32" y="110" width="150" height="140" rx="12" fill="#FFFFFF" stroke="#172A32" stroke-opacity="0.25"/>
+  <text x="48" y="138" fill="#172A32" font-family="system-ui, sans-serif" font-size="13" font-weight="700">Clients &amp; Agents</text>
+  <text x="48" y="162" fill="#586971" font-family="monospace" font-size="11">HTTPS :443</text>
+  <text x="48" y="182" fill="#586971" font-family="system-ui, sans-serif" font-size="11">Operators (Browser)</text>
+  <text x="48" y="200" fill="#586971" font-family="system-ui, sans-serif" font-size="11">Linux systemd Agents</text>
+  <text x="48" y="218" fill="#586971" font-family="system-ui, sans-serif" font-size="11">GitHub Webhooks</text>
+
+  <rect x="224" y="110" width="170" height="140" rx="12" fill="#FFFFFF" stroke="#237C83" stroke-width="1.8"/>
+  <text x="240" y="138" fill="#172A32" font-family="system-ui, sans-serif" font-size="13" font-weight="700">Nginx TLS Edge</text>
+  <text x="240" y="160" fill="#586971" font-family="system-ui, sans-serif" font-size="11">TLS 1.2/1.3 Termination</text>
+  <text x="240" y="178" fill="#586971" font-family="system-ui, sans-serif" font-size="11">SSE Buffering Off</text>
+  <text x="240" y="196" fill="#586971" font-family="system-ui, sans-serif" font-size="11">Rate &amp; Body Limits</text>
+  <text x="240" y="214" fill="#586971" font-family="system-ui, sans-serif" font-size="11">Private /metrics ACL</text>
+
+  <rect x="436" y="88" width="472" height="218" rx="14" fill="#FFFFFF" stroke="#172A32" stroke-dasharray="6 4"/>
+  <text x="454" y="114" fill="#237C83" font-family="monospace" font-size="11" font-weight="700">PRIVATE NETWORK (10.42.0.0/16 · NO PUBLIC DB PORTS)</text>
+
+  <rect x="454" y="130" width="194" height="70" rx="10" fill="#F3F6F8" stroke="#172A32" stroke-opacity="0.2"/>
+  <text x="468" y="156" fill="#172A32" font-family="system-ui, sans-serif" font-size="13" font-weight="700">Next.js Web :3000</text>
+  <text x="468" y="176" fill="#586971" font-family="system-ui, sans-serif" font-size="11">Standalone SSR Server</text>
+
+  <rect x="454" y="214" width="194" height="74" rx="10" fill="#F3F6F8" stroke="#237C83"/>
+  <text x="468" y="240" fill="#172A32" font-family="system-ui, sans-serif" font-size="13" font-weight="700">Go API :8080 + Worker</text>
+  <text x="468" y="260" fill="#586971" font-family="system-ui, sans-serif" font-size="11">Scheduler · Deployments</text>
+
+  <rect x="688" y="130" width="202" height="70" rx="10" fill="#F3F6F8" stroke="#172A32" stroke-opacity="0.2"/>
+  <text x="702" y="156" fill="#172A32" font-family="system-ui, sans-serif" font-size="13" font-weight="700">PostgreSQL 16 + Backups</text>
+  <text x="702" y="176" fill="#586971" font-family="system-ui, sans-serif" font-size="11">pg_dump · SHA-256 Verified</text>
+
+  <rect x="688" y="214" width="202" height="74" rx="10" fill="#F3F6F8" stroke="#172A32" stroke-opacity="0.2"/>
+  <text x="702" y="240" fill="#172A32" font-family="system-ui, sans-serif" font-size="13" font-weight="700">Redis 7 + Prometheus</text>
+  <text x="702" y="260" fill="#586971" font-family="system-ui, sans-serif" font-size="11">Queue · Internal Scrape</text>
+
+  <line x1="182" y1="180" x2="220" y2="180" stroke="#237C83" stroke-width="2" marker-end="url(#a8)"/>
+  <line x1="394" y1="164" x2="450" y2="164" stroke="#237C83" stroke-width="2" marker-end="url(#a8)"/>
+  <line x1="394" y1="244" x2="450" y2="244" stroke="#237C83" stroke-width="2" marker-end="url(#a8)"/>
+  <line x1="648" y1="234" x2="684" y2="174" stroke="#237C83" stroke-width="1.8" marker-end="url(#a8)"/>
+  <line x1="648" y1="254" x2="684" y2="254" stroke="#237C83" stroke-width="1.8" marker-end="url(#a8)"/>
+</svg>

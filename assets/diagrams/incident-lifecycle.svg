@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 260" width="920" height="260" fill="none">
+  <rect width="920" height="260" rx="16" fill="#F3F6F8"/>
+  <text x="32" y="42" fill="#172A32" font-family="system-ui, sans-serif" font-size="19" font-weight="700">Alert Evaluation to Incident Lifecycle</text>
+  <defs><marker id="a6" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 1L10 5L0 9Z" fill="#237C83"/></marker></defs>
+  <g font-family="system-ui, sans-serif">
+    <rect x="32" y="84" width="210" height="126" rx="12" fill="#FFFFFF" stroke="#172A32" stroke-opacity="0.25"/>
+    <text x="48" y="112" fill="#172A32" font-size="13" font-weight="700">Alert Rule State Machine</text>
+    <text x="48" y="136" fill="#586971" font-family="monospace" font-size="11">OK -> PENDING -> FIRING</text>
+    <text x="48" y="158" fill="#586971" font-size="11">Duration &amp; Cooldown Guards</text>
+    <text x="48" y="178" fill="#586971" font-size="11">Recovery Resolves Event</text>
+
+    <rect x="284" y="84" width="186" height="126" rx="12" fill="#FFFFFF" stroke="#237C83" stroke-width="1.6"/>
+    <text x="300" y="112" fill="#172A32" font-size="13" font-weight="700">Escalation &amp; Dedupe</text>
+    <text x="300" y="136" fill="#586971" font-size="11">auto_incident = true</text>
+    <text x="300" y="156" fill="#586971" font-size="11">Fingerprint Deduplication</text>
+    <text x="300" y="176" fill="#586971" font-size="11">In-App + SSRF Webhook</text>
+
+    <rect x="512" y="84" width="376" height="126" rx="12" fill="#FFFFFF" stroke="#172A32" stroke-opacity="0.25"/>
+    <text x="528" y="112" fill="#172A32" font-size="13" font-weight="700">Incident Workspace Lifecycle</text>
+    <text x="528" y="138" fill="#237C83" font-family="monospace" font-size="11" font-weight="700">OPEN -> INVESTIGATING -> IDENTIFIED -> MONITORING -> RESOLVED</text>
+    <text x="528" y="164" fill="#586971" font-size="11">Timeline Notes · Root Cause · Postmortem Markdown · Audit Trail</text>
+    <text x="528" y="184" fill="#586971" font-size="11">Deterministic Correlation + Optional Disabled-by-Default AI Summary</text>
+  </g>
+  <line x1="242" y1="146" x2="280" y2="146" stroke="#237C83" stroke-width="2" marker-end="url(#a6)"/>
+  <line x1="470" y1="146" x2="508" y2="146" stroke="#237C83" stroke-width="2" marker-end="url(#a6)"/>
+</svg>

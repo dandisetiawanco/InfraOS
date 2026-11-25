@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 260" width="920" height="260" fill="none">
+  <rect width="920" height="260" rx="16" fill="#F3F6F8"/>
+  <text x="32" y="42" fill="#172A32" font-family="system-ui, sans-serif" font-size="19" font-weight="700">Service Monitoring Scheduler Lifecycle</text>
+  <defs><marker id="a4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 1L10 5L0 9Z" fill="#237C83"/></marker></defs>
+  <g font-family="system-ui, sans-serif">
+    <rect x="32" y="88" width="166" height="122" rx="12" fill="#FFFFFF" stroke="#172A32" stroke-opacity="0.25"/>
+    <text x="46" y="116" fill="#172A32" font-size="13" font-weight="700">5s Ticker Sweep</text>
+    <text x="46" y="138" fill="#586971" font-size="11">Select enabled services</text>
+    <text x="46" y="156" fill="#586971" font-size="11">Exclude demo orgs</text>
+    <text x="46" y="174" fill="#586971" font-size="11">Skip in-flight checks</text>
+
+    <rect x="240" y="88" width="186" height="122" rx="12" fill="#FFFFFF" stroke="#237C83" stroke-width="1.6"/>
+    <text x="254" y="116" fill="#172A32" font-size="13" font-weight="700">SSRF Policy Gate</text>
+    <text x="254" y="138" fill="#586971" font-size="11">Resolve DNS &amp; Check IPs</text>
+    <text x="254" y="156" fill="#586971" font-size="11">Block 169.254 / RFC1918</text>
+    <text x="254" y="174" fill="#586971" font-size="11">Re-check Redirects</text>
+
+    <rect x="468" y="88" width="182" height="122" rx="12" fill="#FFFFFF" stroke="#172A32" stroke-opacity="0.25"/>
+    <text x="482" y="116" fill="#172A32" font-size="13" font-weight="700">Bounded Probe Pool</text>
+    <text x="482" y="138" fill="#586971" font-size="11">HTTP / HTTPS / TCP</text>
+    <text x="482" y="156" fill="#586971" font-size="11">DNS &amp; TLS Cert Expiry</text>
+    <text x="482" y="174" fill="#586971" font-size="11">64 KiB Response Cap</text>
+
+    <rect x="692" y="88" width="196" height="122" rx="12" fill="#FFFFFF" stroke="#237C83" stroke-width="1.6"/>
+    <text x="706" y="116" fill="#172A32" font-size="13" font-weight="700">Persist &amp; Escalate</text>
+    <text x="706" y="138" fill="#586971" font-size="11">Insert service_checks</text>
+    <text x="706" y="156" fill="#586971" font-size="11">Compute Observed Uptime</text>
+    <text x="706" y="174" fill="#586971" font-size="11">Notify Alerts + SSE</text>
+  </g>
+  <line x1="198" y1="148" x2="236" y2="148" stroke="#237C83" stroke-width="2" marker-end="url(#a4)"/>
+  <line x1="426" y1="148" x2="464" y2="148" stroke="#237C83" stroke-width="2" marker-end="url(#a4)"/>
+  <line x1="650" y1="148" x2="688" y2="148" stroke="#237C83" stroke-width="2" marker-end="url(#a4)"/>
+</svg>

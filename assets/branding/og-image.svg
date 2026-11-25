@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630" fill="none">
+  <rect width="1200" height="630" fill="#10171C"/>
+  <rect x="44" y="44" width="1112" height="542" rx="24" fill="#19242C" stroke="#EDF4F6" stroke-opacity="0.12" stroke-width="2"/>
+  <g transform="translate(100, 128)">
+    <rect width="72" height="72" rx="18" fill="#10171C" stroke="#9DE1DD" stroke-opacity="0.35" stroke-width="1.5"/>
+    <path d="M18 28L36 18L54 28L36 38L18 28Z" fill="#9DE1DD"/>
+    <path d="M18 38L36 48L54 38" stroke="#EDF4F6" stroke-width="3.6" stroke-linecap="square"/>
+    <path d="M18 47L36 57L54 47" stroke="#9DE1DD" stroke-opacity="0.65" stroke-width="3.6" stroke-linecap="square"/>
+    <circle cx="36" cy="28" r="3.5" fill="#10171C"/>
+    <text x="94" y="50" fill="#EDF4F6" font-family="system-ui, -apple-system, sans-serif" font-size="44" font-weight="700" letter-spacing="-0.03em">Infra<tspan fill="#9DE1DD">OS</tspan></text>
+    <text x="0" y="176" fill="#EDF4F6" font-family="system-ui, -apple-system, sans-serif" font-size="58" font-weight="700" letter-spacing="-0.03em">Infrastructure under control.</text>
+    <text x="0" y="236" fill="#A4B5BD" font-family="system-ui, -apple-system, sans-serif" font-size="26">Monitor systems, inspect services, and manage deployments from one workspace.</text>
+    <text x="0" y="346" fill="#9DE1DD" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="18">dandisetiawan.id · github.com/dandisetiawanco/InfraOS</text>
+  </g>
+</svg>

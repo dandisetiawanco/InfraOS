@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 270" width="920" height="270" fill="none">
+  <rect width="920" height="270" rx="16" fill="#F3F6F8"/>
+  <text x="32" y="42" fill="#172A32" font-family="system-ui, sans-serif" font-size="19" font-weight="700">Controlled Deployment and Rollback Workflow</text>
+  <text x="32" y="64" fill="#586971" font-family="system-ui, sans-serif" font-size="12">Atomic SQL target lock prevents conflicting rollouts; rollback requires verified previous artifact</text>
+  <defs><marker id="a5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 1L10 5L0 9Z" fill="#237C83"/></marker></defs>
+  <g font-family="monospace" font-size="12" font-weight="700" text-anchor="middle">
+    <rect x="32" y="102" width="112" height="48" rx="10" fill="#FFFFFF" stroke="#237C83" stroke-width="1.6"/>
+    <text x="88" y="130" fill="#172A32">1. QUEUED</text>
+    <rect x="176" y="102" width="124" height="48" rx="10" fill="#FFFFFF" stroke="#172A32" stroke-opacity="0.25"/>
+    <text x="238" y="130" fill="#172A32">2. PREPARING</text>
+    <rect x="332" y="102" width="120" height="48" rx="10" fill="#FFFFFF" stroke="#172A32" stroke-opacity="0.25"/>
+    <text x="392" y="130" fill="#172A32">3. BUILDING</text>
+    <rect x="484" y="102" width="124" height="48" rx="10" fill="#FFFFFF" stroke="#172A32" stroke-opacity="0.25"/>
+    <text x="546" y="130" fill="#172A32">4. DEPLOYING</text>
+    <rect x="640" y="102" width="124" height="48" rx="10" fill="#FFFFFF" stroke="#237C83" stroke-width="1.6"/>
+    <text x="702" y="130" fill="#172A32">5. VERIFYING</text>
+    <rect x="796" y="84" width="96" height="38" rx="9" fill="#E6F4EE" stroke="#166534"/>
+    <text x="844" y="107" fill="#166534" font-size="11">SUCCEEDED</text>
+    <rect x="796" y="132" width="96" height="38" rx="9" fill="#FCE8E8" stroke="#991B1B"/>
+    <text x="844" y="155" fill="#991B1B" font-size="11">FAILED</text>
+  </g>
+  <line x1="144" y1="126" x2="172" y2="126" stroke="#237C83" stroke-width="2" marker-end="url(#a5)"/>
+  <line x1="300" y1="126" x2="328" y2="126" stroke="#237C83" stroke-width="2" marker-end="url(#a5)"/>
+  <line x1="452" y1="126" x2="480" y2="126" stroke="#237C83" stroke-width="2" marker-end="url(#a5)"/>
+  <line x1="608" y1="126" x2="636" y2="126" stroke="#237C83" stroke-width="2" marker-end="url(#a5)"/>
+  <line x1="764" y1="116" x2="792" y2="105" stroke="#166534" stroke-width="2" marker-end="url(#a5)"/>
+  <line x1="764" y1="136" x2="792" y2="148" stroke="#991B1B" stroke-width="2" marker-end="url(#a5)"/>
+  <rect x="176" y="194" width="588" height="48" rx="10" fill="#FFFFFF" stroke="#237C83" stroke-dasharray="5 4"/>
+  <text x="470" y="222" text-anchor="middle" fill="#172A32" font-family="system-ui, sans-serif" font-size="12" font-weight="600">Authorized Rollback -> Lock Target -> Restore Previous Artifact -> Verify Health -> ROLLED_BACK -> Release Lock</text>
+</svg>

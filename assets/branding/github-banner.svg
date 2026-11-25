@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 420" width="1280" height="420" fill="none">
+  <rect width="1280" height="420" fill="#10171C"/>
+  <rect x="32" y="32" width="1216" height="356" rx="20" fill="#19242C" stroke="#EDF4F6" stroke-opacity="0.12" stroke-width="1.5"/>
+  <!-- Architectural layer motif on right -->
+  <g opacity="0.92" transform="translate(810, 74)">
+    <rect x="0" y="0" width="380" height="272" rx="14" fill="#10171C" stroke="#9DE1DD" stroke-opacity="0.22"/>
+    <rect x="20" y="20" width="104" height="232" rx="10" fill="#19242C" stroke="#EDF4F6" stroke-opacity="0.1"/>
+    <rect x="34" y="38" width="76" height="10" rx="3" fill="#9DE1DD" fill-opacity="0.85"/>
+    <rect x="34" y="64" width="60" height="8" rx="3" fill="#EDF4F6" fill-opacity="0.28"/>
+    <rect x="34" y="84" width="68" height="8" rx="3" fill="#EDF4F6" fill-opacity="0.28"/>
+    <rect x="34" y="104" width="54" height="8" rx="3" fill="#EDF4F6" fill-opacity="0.28"/>
+    <rect x="34" y="124" width="72" height="8" rx="3" fill="#EDF4F6" fill-opacity="0.28"/>
+    <rect x="140" y="20" width="220" height="106" rx="10" fill="#19242C" stroke="#EDF4F6" stroke-opacity="0.1"/>
+    <polyline points="156,104 186,88 216,94 246,70 276,78 306,56 344,64" stroke="#9DE1DD" stroke-width="2.5" fill="none"/>
+    <polyline points="156,112 186,106 216,109 246,98 276,102 306,90 344,94" stroke="#A4B5BD" stroke-opacity="0.6" stroke-width="2" fill="none"/>
+    <rect x="140" y="142" width="104" height="110" rx="10" fill="#19242C" stroke="#EDF4F6" stroke-opacity="0.1"/>
+    <rect x="154" y="160" width="44" height="8" rx="3" fill="#A4B5BD" fill-opacity="0.6"/>
+    <rect x="154" y="182" width="68" height="16" rx="3" fill="#EDF4F6" fill-opacity="0.88"/>
+    <rect x="154" y="212" width="74" height="6" rx="3" fill="#237C83"/>
+    <rect x="256" y="142" width="104" height="110" rx="10" fill="#19242C" stroke="#EDF4F6" stroke-opacity="0.1"/>
+    <rect x="270" y="160" width="52" height="8" rx="3" fill="#A4B5BD" fill-opacity="0.6"/>
+    <rect x="270" y="182" width="62" height="16" rx="3" fill="#9DE1DD"/>
+    <rect x="270" y="212" width="74" height="6" rx="3" fill="#6EE7B7"/>
+  </g>
+  <!-- Brand mark and typography -->
+  <g transform="translate(88, 96)">
+    <rect width="64" height="64" rx="16" fill="#10171C" stroke="#9DE1DD" stroke-opacity="0.35" stroke-width="1.5"/>
+    <path d="M16 24.5L32 16L48 24.5L32 33L16 24.5Z" fill="#9DE1DD"/>
+    <path d="M16 33.5L32 42L48 33.5" stroke="#EDF4F6" stroke-width="3.2" stroke-linecap="square"/>
+    <path d="M16 41.5L32 50L48 41.5" stroke="#9DE1DD" stroke-opacity="0.65" stroke-width="3.2" stroke-linecap="square"/>
+    <circle cx="32" cy="24.5" r="3" fill="#10171C"/>
+    <text x="84" y="45" fill="#EDF4F6" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="38" font-weight="700" letter-spacing="-0.03em">Infra<tspan fill="#9DE1DD">OS</tspan></text>
+    <text x="0" y="128" fill="#EDF4F6" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="42" font-weight="650" letter-spacing="-0.03em">Infrastructure under control.</text>
+    <text x="0" y="172" fill="#A4B5BD" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="20">One workspace to monitor, deploy, and operate your infrastructure.</text>
+    <text x="0" y="224" fill="#9DE1DD" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="14">Go Control Plane · Real System Agent · Next.js Liquid Glass Workspace</text>
+  </g>
+</svg>
