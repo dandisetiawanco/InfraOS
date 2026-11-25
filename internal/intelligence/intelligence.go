@@ -74,175 +74,191 @@ func (a *Analyzer) Analyze(ctx context.Context, orgID string) ([]Insight, error)
 	insights := make([]Insight, 0)
 
 	// 1. Sustained memory pressure & disk capacity threshold across hosts.
+	type hostRow struct {
+		id, hostname, status, lastHB string
+		synthInt                     int
+	}
+	var hostItems []hostRow
 	hostRows, err := a.db.Query(ctx, `
 		SELECT id, hostname, status, COALESCE(last_heartbeat_at, ''), CASE WHEN is_synthetic THEN 1 ELSE 0 END
 		FROM hosts WHERE organization_id = ?`, orgID)
 	if err == nil {
-		defer hostRows.Close()
 		for hostRows.Next() {
-			var hostID, hostname, status, lastHB string
-			var synthInt int
-			if err := hostRows.Scan(&hostID, &hostname, &status, &lastHB, &synthInt); err != nil {
-				continue
+			var h hostRow
+			if err := hostRows.Scan(&h.id, &h.hostname, &h.status, &h.lastHB, &h.synthInt); err == nil {
+				hostItems = append(hostItems, h)
 			}
+		}
+		_ = hostRows.Close()
+	}
 
-			// Missing agent heartbeats
-			if synthInt == 0 && status != "revoked" && lastHB != "" {
-				if hbTime, err := time.Parse(time.RFC3339, lastHB); err == nil && now.Sub(hbTime) > 90*time.Second {
-					insights = append(insights, Insight{
-						ID:           "stale-hb-" + hostID,
-						Category:     "agent_heartbeat",
-						Severity:     "warning",
-						Title:        fmt.Sprintf("Missing agent heartbeats from %s", hostname),
-						Detail:       fmt.Sprintf("Last heartbeat was received %s ago.", now.Sub(hbTime).Round(time.Second)),
-						ResourceType: "host",
-						ResourceID:   hostID,
-						Evidence:     []string{"Last heartbeat: " + lastHB},
-						DetectedAt:   nowStr,
-					})
-				}
-			}
+	for _, h := range hostItems {
+		hostID, hostname, status, lastHB, synthInt := h.id, h.hostname, h.status, h.lastHB, h.synthInt
 
-			// Inspect last 5 metric samples for sustained memory pressure and disk capacity
-			mRows, err := a.db.Query(ctx, `
-				SELECT mem_percent, disk_percent, cpu_percent
-				FROM host_metrics WHERE organization_id = ? AND host_id = ?
-				ORDER BY id DESC LIMIT 5`, orgID, hostID)
-			if err != nil {
-				continue
-			}
-			var highMemCount int
-			var latestDisk, latestMem float64
-			samples := 0
-			for mRows.Next() {
-				var memPct, diskPct, cpuPct float64
-				if err := mRows.Scan(&memPct, &diskPct, &cpuPct); err == nil {
-					if samples == 0 {
-						latestDisk = diskPct
-						latestMem = memPct
-					}
-					if memPct >= 80 {
-						highMemCount++
-					}
-					samples++
-				}
-			}
-			mRows.Close()
-
-			if samples >= 3 && highMemCount == samples {
+		// Missing agent heartbeats
+		if synthInt == 0 && status != "revoked" && lastHB != "" {
+			if hbTime, err := time.Parse(time.RFC3339, lastHB); err == nil && now.Sub(hbTime) > 90*time.Second {
 				insights = append(insights, Insight{
-					ID:           "mem-pressure-" + hostID,
-					Category:     "memory_pressure",
+					ID:           "stale-hb-" + hostID,
+					Category:     "agent_heartbeat",
 					Severity:     "warning",
-					Title:        fmt.Sprintf("Sustained memory pressure on %s", hostname),
-					Detail:       fmt.Sprintf("Memory utilization remained above 80%% across the last %d samples (latest %.1f%%).", samples, latestMem),
+					Title:        fmt.Sprintf("Missing agent heartbeats from %s", hostname),
+					Detail:       fmt.Sprintf("Last heartbeat was received %s ago.", now.Sub(hbTime).Round(time.Second)),
 					ResourceType: "host",
 					ResourceID:   hostID,
-					Evidence:     []string{fmt.Sprintf("Consecutive samples >= 80%%: %d", highMemCount), fmt.Sprintf("Latest memory usage: %.1f%%", latestMem)},
-					DetectedAt:   nowStr,
-				})
-			}
-			if samples > 0 && latestDisk >= 80 {
-				sev := "warning"
-				if latestDisk >= 90 {
-					sev = "critical"
-				}
-				insights = append(insights, Insight{
-					ID:           "disk-cap-" + hostID,
-					Category:     "disk_capacity",
-					Severity:     sev,
-					Title:        fmt.Sprintf("Disk capacity approaching limit on %s", hostname),
-					Detail:       fmt.Sprintf("Primary filesystem usage is %.1f%%.", latestDisk),
-					ResourceType: "host",
-					ResourceID:   hostID,
-					Evidence:     []string{fmt.Sprintf("Observed disk usage: %.1f%%", latestDisk)},
+					Evidence:     []string{"Last heartbeat: " + lastHB},
 					DetectedAt:   nowStr,
 				})
 			}
 		}
+
+		// Inspect last 5 metric samples for sustained memory pressure and disk capacity
+		mRows, err := a.db.Query(ctx, `
+			SELECT mem_percent, disk_percent, cpu_percent
+			FROM host_metrics WHERE organization_id = ? AND host_id = ?
+			ORDER BY id DESC LIMIT 5`, orgID, hostID)
+		if err != nil {
+			continue
+		}
+		var highMemCount int
+		var latestDisk, latestMem float64
+		samples := 0
+		for mRows.Next() {
+			var memPct, diskPct, cpuPct float64
+			if err := mRows.Scan(&memPct, &diskPct, &cpuPct); err == nil {
+				if samples == 0 {
+					latestDisk = diskPct
+					latestMem = memPct
+				}
+				if memPct >= 80 {
+					highMemCount++
+				}
+				samples++
+			}
+		}
+		_ = mRows.Close()
+
+		if samples >= 3 && highMemCount == samples {
+			insights = append(insights, Insight{
+				ID:           "mem-pressure-" + hostID,
+				Category:     "memory_pressure",
+				Severity:     "warning",
+				Title:        fmt.Sprintf("Sustained memory pressure on %s", hostname),
+				Detail:       fmt.Sprintf("Memory utilization remained above 80%% across the last %d samples (latest %.1f%%).", samples, latestMem),
+				ResourceType: "host",
+				ResourceID:   hostID,
+				Evidence:     []string{fmt.Sprintf("Consecutive samples >= 80%%: %d", highMemCount), fmt.Sprintf("Latest memory usage: %.1f%%", latestMem)},
+				DetectedAt:   nowStr,
+			})
+		}
+		if samples > 0 && latestDisk >= 80 {
+			sev := "warning"
+			if latestDisk >= 90 {
+				sev = "critical"
+			}
+			insights = append(insights, Insight{
+				ID:           "disk-cap-" + hostID,
+				Category:     "disk_capacity",
+				Severity:     sev,
+				Title:        fmt.Sprintf("Disk capacity approaching limit on %s", hostname),
+				Detail:       fmt.Sprintf("Primary filesystem usage is %.1f%%.", latestDisk),
+				ResourceType: "host",
+				ResourceID:   hostID,
+				Evidence:     []string{fmt.Sprintf("Observed disk usage: %.1f%%", latestDisk)},
+				DetectedAt:   nowStr,
+			})
+		}
 	}
 
 	// 2. Service repeated failures, latency increase, and deployment correlation (distinct from root cause).
+	type svcRow struct {
+		id, name, status, envID string
+		consecFail              int
+	}
+	var svcItems []svcRow
 	svcRows, err := a.db.Query(ctx, `
 		SELECT id, name, status, consecutive_failures, COALESCE(environment_id, '')
 		FROM services WHERE organization_id = ?`, orgID)
 	if err == nil {
-		defer svcRows.Close()
 		for svcRows.Next() {
-			var svcID, svcName, status, envID string
-			var consecFail int
-			if err := svcRows.Scan(&svcID, &svcName, &status, &consecFail, &envID); err != nil {
-				continue
+			var sv svcRow
+			if err := svcRows.Scan(&sv.id, &sv.name, &sv.status, &sv.consecFail, &sv.envID); err == nil {
+				svcItems = append(svcItems, sv)
 			}
+		}
+		_ = svcRows.Close()
+	}
 
-			if consecFail >= 2 || status == "down" {
-				insights = append(insights, Insight{
-					ID:           "svc-fail-" + svcID,
-					Category:     "service_failures",
-					Severity:     "critical",
-					Title:        fmt.Sprintf("Repeated check failures on %s", svcName),
-					Detail:       fmt.Sprintf("Service status is %s with %d consecutive failed checks.", status, consecFail),
-					ResourceType: "service",
-					ResourceID:   svcID,
-					Evidence:     []string{fmt.Sprintf("Consecutive failures: %d", consecFail)},
-					DetectedAt:   nowStr,
-				})
+	for _, sv := range svcItems {
+		svcID, svcName, status, consecFail, envID := sv.id, sv.name, sv.status, sv.consecFail, sv.envID
 
-				// Check for recent deployment in the same environment within 60 minutes.
-				if envID != "" {
-					var depID, depVer, depTime string
-					err := a.db.QueryRow(ctx, `
-						SELECT id, version, created_at FROM deployments
-						WHERE organization_id = ? AND environment_id = ? AND created_at >= ?
-						ORDER BY created_at DESC LIMIT 1`,
-						orgID, envID, now.Add(-60*time.Minute).Format(time.RFC3339)).Scan(&depID, &depVer, &depTime)
-					if err == nil {
-						insights = append(insights, Insight{
-							ID:              "dep-corr-" + svcID,
-							Category:        "deployment_correlation",
-							Severity:        "warning",
-							Title:           fmt.Sprintf("Degradation on %s followed release %s", svcName, depVer),
-							Detail:          "Temporal correlation observed between a recent deployment and service degradation. Verify logs and rollout changes before concluding root cause.",
-							CorrelationOnly: true,
-							ResourceType:    "deployment",
-							ResourceID:      depID,
-							Evidence:        []string{"Deployment version: " + depVer, "Deployed at: " + depTime, "Correlation does not confirm root cause."},
-							DetectedAt:      nowStr,
-						})
-					}
+		if consecFail >= 2 || status == "down" {
+			insights = append(insights, Insight{
+				ID:           "svc-fail-" + svcID,
+				Category:     "service_failures",
+				Severity:     "critical",
+				Title:        fmt.Sprintf("Repeated check failures on %s", svcName),
+				Detail:       fmt.Sprintf("Service status is %s with %d consecutive failed checks.", status, consecFail),
+				ResourceType: "service",
+				ResourceID:   svcID,
+				Evidence:     []string{fmt.Sprintf("Consecutive failures: %d", consecFail)},
+				DetectedAt:   nowStr,
+			})
+
+			// Check for recent deployment in the same environment within 60 minutes.
+			if envID != "" {
+				var depID, depVer, depTime string
+				err := a.db.QueryRow(ctx, `
+					SELECT id, version, created_at FROM deployments
+					WHERE organization_id = ? AND environment_id = ? AND created_at >= ?
+					ORDER BY created_at DESC LIMIT 1`,
+					orgID, envID, now.Add(-60*time.Minute).Format(time.RFC3339)).Scan(&depID, &depVer, &depTime)
+				if err == nil {
+					insights = append(insights, Insight{
+						ID:              "dep-corr-" + svcID,
+						Category:        "deployment_correlation",
+						Severity:        "warning",
+						Title:           fmt.Sprintf("Degradation on %s followed release %s", svcName, depVer),
+						Detail:          "Temporal correlation observed between a recent deployment and service degradation. Verify logs and rollout changes before concluding root cause.",
+						CorrelationOnly: true,
+						ResourceType:    "deployment",
+						ResourceID:      depID,
+						Evidence:        []string{"Deployment version: " + depVer, "Deployed at: " + depTime, "Correlation does not confirm root cause."},
+						DetectedAt:      nowStr,
+					})
 				}
 			}
+		}
 
-			// Latency trend over recent checks
-			cRows, err := a.db.Query(ctx, `
-				SELECT latency_ms FROM service_checks
-				WHERE organization_id = ? AND service_id = ? AND status = 'up'
-				ORDER BY id DESC LIMIT 10`, orgID, svcID)
-			if err == nil {
-				var vals []int
-				for cRows.Next() {
-					var ms int
-					if err := cRows.Scan(&ms); err == nil {
-						vals = append(vals, ms)
-					}
+		// Latency trend over recent checks
+		cRows, err := a.db.Query(ctx, `
+			SELECT latency_ms FROM service_checks
+			WHERE organization_id = ? AND service_id = ? AND status = 'up'
+			ORDER BY id DESC LIMIT 10`, orgID, svcID)
+		if err == nil {
+			var vals []int
+			for cRows.Next() {
+				var ms int
+				if err := cRows.Scan(&ms); err == nil {
+					vals = append(vals, ms)
 				}
-				cRows.Close()
-				if len(vals) >= 6 {
-					recentAvg := avgInts(vals[:3])
-					baselineAvg := avgInts(vals[3:])
-					if baselineAvg >= 20 && recentAvg > baselineAvg*1.5 && recentAvg-baselineAvg >= 40 {
-						insights = append(insights, Insight{
-							ID:           "latency-trend-" + svcID,
-							Category:     "latency_trend",
-							Severity:     "warning",
-							Title:        fmt.Sprintf("Increasing response latency on %s", svcName),
-							Detail:       fmt.Sprintf("Recent average latency (%.0f ms) is above the prior baseline (%.0f ms).", recentAvg, baselineAvg),
-							ResourceType: "service",
-							ResourceID:   svcID,
-							Evidence:     []string{fmt.Sprintf("Recent 3-check average: %.0f ms", recentAvg), fmt.Sprintf("Prior baseline average: %.0f ms", baselineAvg)},
-							DetectedAt:   nowStr,
-						})
-					}
+			}
+			_ = cRows.Close()
+			if len(vals) >= 6 {
+				recentAvg := avgInts(vals[:3])
+				baselineAvg := avgInts(vals[3:])
+				if baselineAvg >= 20 && recentAvg > baselineAvg*1.5 && recentAvg-baselineAvg >= 40 {
+					insights = append(insights, Insight{
+						ID:           "latency-trend-" + svcID,
+						Category:     "latency_trend",
+						Severity:     "warning",
+						Title:        fmt.Sprintf("Increasing response latency on %s", svcName),
+						Detail:       fmt.Sprintf("Recent average latency (%.0f ms) is above the prior baseline (%.0f ms).", recentAvg, baselineAvg),
+						ResourceType: "service",
+						ResourceID:   svcID,
+						Evidence:     []string{fmt.Sprintf("Recent 3-check average: %.0f ms", recentAvg), fmt.Sprintf("Prior baseline average: %.0f ms", baselineAvg)},
+						DetectedAt:   nowStr,
+					})
 				}
 			}
 		}

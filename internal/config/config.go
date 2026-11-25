@@ -9,37 +9,37 @@ import (
 )
 
 type Config struct {
-	Profile                   string
-	APIHost                   string
-	APIPort                   int
-	WebURL                    string
-	AllowedOrigins            []string
-	ExposeAPIDocs             bool
-	DBDriver                  string
-	SQLitePath                string
-	PostgresDSN               string
-	RedisAddr                 string
-	SessionTTL                time.Duration
-	CookieSecure              bool
-	LoginRateLimitPerMin      int
-	MonitoringLocalAllowlist  []string
-	MonitoringMaxConcurrency  int
-	DockerEnabled             bool
-	DockerSocket              string
-	DockerAllowMutations      bool
-	DockerMutationAllowlist   []string
-	AIProvider                string
-	AIEndpoint                string
-	AIAPIKey                  string
-	AIModel                   string
-	OTELEnabled               bool
-	OTELExporterEndpoint      string
-	MetricsRetentionDays      int
-	LogsRetentionDays         int
-	ChecksRetentionDays       int
-	EmbeddedWorker            bool
-	BackupDir                 string
-	SecretEncryptionKey       string
+	Profile                  string
+	APIHost                  string
+	APIPort                  int
+	WebURL                   string
+	AllowedOrigins           []string
+	ExposeAPIDocs            bool
+	DBDriver                 string
+	SQLitePath               string
+	PostgresDSN              string
+	RedisAddr                string
+	SessionTTL               time.Duration
+	CookieSecure             bool
+	LoginRateLimitPerMin     int
+	MonitoringLocalAllowlist []string
+	MonitoringMaxConcurrency int
+	DockerEnabled            bool
+	DockerSocket             string
+	DockerAllowMutations     bool
+	DockerMutationAllowlist  []string
+	AIProvider               string
+	AIEndpoint               string
+	AIAPIKey                 string
+	AIModel                  string
+	OTELEnabled              bool
+	OTELExporterEndpoint     string
+	MetricsRetentionDays     int
+	LogsRetentionDays        int
+	ChecksRetentionDays      int
+	EmbeddedWorker           bool
+	BackupDir                string
+	SecretEncryptionKey      string
 }
 
 func Load() (Config, error) {

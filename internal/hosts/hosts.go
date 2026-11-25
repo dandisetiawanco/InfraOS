@@ -19,32 +19,32 @@ import (
 )
 
 type Host struct {
-	ID              string                   `json:"id"`
-	OrgID           string                   `json:"organization_id"`
-	EnvironmentID   string                   `json:"environment_id,omitempty"`
-	EnvironmentName string                   `json:"environment_name,omitempty"`
-	Hostname        string                   `json:"hostname"`
-	DisplayName     string                   `json:"display_name"`
-	OS              string                   `json:"os"`
-	Arch            string                   `json:"arch"`
-	KernelVersion   string                   `json:"kernel_version"`
-	IPAddress       string                   `json:"ip_address"`
-	Tags            []string                 `json:"tags"`
-	Status          string                   `json:"status"`
-	Freshness       string                   `json:"freshness"`
-	IsSynthetic     bool                     `json:"is_synthetic"`
-	Metadata        map[string]any           `json:"metadata"`
-	LastHeartbeatAt string                   `json:"last_heartbeat_at,omitempty"`
-	AgentID         string                   `json:"agent_id,omitempty"`
-	AgentVersion    string                   `json:"agent_version,omitempty"`
-	AgentStatus     string                   `json:"agent_status,omitempty"`
-	LatestMetric    *MetricPoint             `json:"latest_metric,omitempty"`
-	Filesystems     []contracts.FilesystemMetric `json:"filesystems,omitempty"`
+	ID              string                             `json:"id"`
+	OrgID           string                             `json:"organization_id"`
+	EnvironmentID   string                             `json:"environment_id,omitempty"`
+	EnvironmentName string                             `json:"environment_name,omitempty"`
+	Hostname        string                             `json:"hostname"`
+	DisplayName     string                             `json:"display_name"`
+	OS              string                             `json:"os"`
+	Arch            string                             `json:"arch"`
+	KernelVersion   string                             `json:"kernel_version"`
+	IPAddress       string                             `json:"ip_address"`
+	Tags            []string                           `json:"tags"`
+	Status          string                             `json:"status"`
+	Freshness       string                             `json:"freshness"`
+	IsSynthetic     bool                               `json:"is_synthetic"`
+	Metadata        map[string]any                     `json:"metadata"`
+	LastHeartbeatAt string                             `json:"last_heartbeat_at,omitempty"`
+	AgentID         string                             `json:"agent_id,omitempty"`
+	AgentVersion    string                             `json:"agent_version,omitempty"`
+	AgentStatus     string                             `json:"agent_status,omitempty"`
+	LatestMetric    *MetricPoint                       `json:"latest_metric,omitempty"`
+	Filesystems     []contracts.FilesystemMetric       `json:"filesystems,omitempty"`
 	Interfaces      []contracts.NetworkInterfaceMetric `json:"interfaces,omitempty"`
-	Optional        *contracts.OptionalMetrics `json:"optional,omitempty"`
-	SupportedRanges []string                 `json:"supported_ranges,omitempty"`
-	CreatedAt       string                   `json:"created_at"`
-	UpdatedAt       string                   `json:"updated_at"`
+	Optional        *contracts.OptionalMetrics         `json:"optional,omitempty"`
+	SupportedRanges []string                           `json:"supported_ranges,omitempty"`
+	CreatedAt       string                             `json:"created_at"`
+	UpdatedAt       string                             `json:"updated_at"`
 }
 
 type MetricPoint struct {
@@ -86,11 +86,11 @@ type AgentIdentity struct {
 }
 
 type Service struct {
-	db              *database.DB
-	audit           *audit.Recorder
-	broker          *sse.Broker
-	metrics         *telemetry.Metrics
-	onMetricIngest  func(ctx context.Context, orgID, hostID string, m contracts.HostMetricPayload)
+	db             *database.DB
+	audit          *audit.Recorder
+	broker         *sse.Broker
+	metrics        *telemetry.Metrics
+	onMetricIngest func(ctx context.Context, orgID, hostID string, m contracts.HostMetricPayload)
 }
 
 func NewService(db *database.DB, auditRec *audit.Recorder, broker *sse.Broker, metrics *telemetry.Metrics) *Service {

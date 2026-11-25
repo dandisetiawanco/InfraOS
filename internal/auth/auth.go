@@ -33,18 +33,18 @@ const (
 type Permission string
 
 const (
-	PermRead                Permission = "read"
-	PermOperateServices     Permission = "operate_services"
-	PermOperateDeployments  Permission = "operate_deployments"
-	PermOperateIncidents    Permission = "operate_incidents"
-	PermOperateLogs         Permission = "operate_logs"
-	PermManageAlerts        Permission = "manage_alerts"
-	PermManageHosts         Permission = "manage_hosts"
-	PermManageContainers    Permission = "manage_containers"
-	PermManageIntegrations  Permission = "manage_integrations"
-	PermManageTeam          Permission = "manage_team"
-	PermManageOrg           Permission = "manage_org"
-	PermManageBackups       Permission = "manage_backups"
+	PermRead               Permission = "read"
+	PermOperateServices    Permission = "operate_services"
+	PermOperateDeployments Permission = "operate_deployments"
+	PermOperateIncidents   Permission = "operate_incidents"
+	PermOperateLogs        Permission = "operate_logs"
+	PermManageAlerts       Permission = "manage_alerts"
+	PermManageHosts        Permission = "manage_hosts"
+	PermManageContainers   Permission = "manage_containers"
+	PermManageIntegrations Permission = "manage_integrations"
+	PermManageTeam         Permission = "manage_team"
+	PermManageOrg          Permission = "manage_org"
+	PermManageBackups      Permission = "manage_backups"
 )
 
 func HasPermission(role Role, perm Permission) bool {

@@ -82,16 +82,16 @@ type CreateServiceInput struct {
 type CheckHook func(ctx context.Context, svc ServiceRecord, result CheckResult)
 
 type Scheduler struct {
-	db             *database.DB
-	ssrf           *security.SSRFValidator
-	broker         *sse.Broker
-	metrics        *telemetry.Metrics
-	logger         *slog.Logger
-	sem            chan struct{}
-	mu             sync.Mutex
-	inFlight       map[string]bool
-	onCheck        CheckHook
-	wg             sync.WaitGroup
+	db       *database.DB
+	ssrf     *security.SSRFValidator
+	broker   *sse.Broker
+	metrics  *telemetry.Metrics
+	logger   *slog.Logger
+	sem      chan struct{}
+	mu       sync.Mutex
+	inFlight map[string]bool
+	onCheck  CheckHook
+	wg       sync.WaitGroup
 }
 
 func NewScheduler(db *database.DB, ssrf *security.SSRFValidator, broker *sse.Broker, metrics *telemetry.Metrics, logger *slog.Logger, maxConcurrency int) *Scheduler {

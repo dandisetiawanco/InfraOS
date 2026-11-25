@@ -366,9 +366,9 @@ func (v *SSRFValidator) ResolveAndValidateHost(ctx context.Context, host string,
 }
 
 var (
-	cgnatCIDR         = mustCIDR("100.64.0.0/10")
-	cloudMetadataIPs  = map[string]struct{}{"169.254.169.254": {}, "169.254.170.2": {}, "100.100.100.200": {}, "fd00:ec2::254": {}}
-	carrierBenchmark  = mustCIDR("198.18.0.0/15")
+	cgnatCIDR        = mustCIDR("100.64.0.0/10")
+	cloudMetadataIPs = map[string]struct{}{"169.254.169.254": {}, "169.254.170.2": {}, "100.100.100.200": {}, "fd00:ec2::254": {}}
+	carrierBenchmark = mustCIDR("198.18.0.0/15")
 )
 
 func mustCIDR(cidr string) *net.IPNet {

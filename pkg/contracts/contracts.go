@@ -22,9 +22,9 @@ type NetworkInterfaceMetric struct {
 }
 
 type BatteryMetric struct {
-	Percent  float64 `json:"percent"`
-	State    string  `json:"state"`
-	Source   string  `json:"source,omitempty"`
+	Percent float64 `json:"percent"`
+	State   string  `json:"state"`
+	Source  string  `json:"source,omitempty"`
 }
 
 type ProcessSummary struct {

@@ -1,41 +1,46 @@
 # Environment and secrets
 .env
-.env.local
-.env.*.local
+.env.*
+!.env.example
 *.pem
 *.key
 *.crt
 *.p12
+*.token
 agent-credentials.json
 credentials.json
 
 # Local runtime state and databases
 .infraos/
 data/
+backups/
 *.db
 *.db-shm
 *.db-wal
+*.db-journal
 *.sqlite
 *.sqlite3
-backups/*.db
-backups/*.sql
-backups/*.dump
-backups/*.gz
+*.sqlite*
 
 # Build outputs
 bin/
 dist/
+coverage/
 coverage.out
 *.test
 
 # Node / Next.js
 node_modules/
+.turbo/
 apps/web/.next/
 apps/web/out/
 apps/web/.turbo/
+apps/web/coverage/
 apps/web/playwright-report/
 apps/web/test-results/
 *.tsbuildinfo
+npm-debug.log*
+pnpm-debug.log*
 
 # Terraform local state
 infrastructure/terraform/.terraform/
