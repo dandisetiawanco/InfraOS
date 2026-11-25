@@ -1,0 +1,52 @@
+# Environment and secrets
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+*.crt
+*.p12
+agent-credentials.json
+credentials.json
+
+# Local runtime state and databases
+.infraos/
+data/
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+backups/*.db
+backups/*.sql
+backups/*.dump
+backups/*.gz
+
+# Build outputs
+bin/
+dist/
+coverage.out
+*.test
+
+# Node / Next.js
+node_modules/
+apps/web/.next/
+apps/web/out/
+apps/web/.turbo/
+apps/web/playwright-report/
+apps/web/test-results/
+*.tsbuildinfo
+
+# Terraform local state
+infrastructure/terraform/.terraform/
+infrastructure/terraform/*.tfstate
+infrastructure/terraform/*.tfstate.*
+infrastructure/terraform/*.tfvars
+!infrastructure/terraform/terraform.tfvars.example
+
+# OS / Editor
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.log
